@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <main>
+            <h3 th:text="${user.username}"></h3>
+
+            <!--            image-->
+            <div th:if="${user.photo != null}">
+                <img th:src="*{'data:image/jpg;base64,' + user.getEncodedPhoto()}"
+                     th:height="200px"
+                     th:width="200px"
+                     alt="...">
+            </div>
+            <div th:unless="${user.photo != null}">
+                <img th:src="@{/images/anonymous.jpg}"
+                     th:height="200px"
+                     th:width="200px"
+                     alt="...">
+            </div>
+
+            <form th:action="@{/profile/update}" th:object="${user_dto}" enctype="multipart/form-data" method="post">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <label>
+                    Username
+                    <input name="username"
+                           th:value="${user.username}">
+                </label>
+                <label>
+                    First Name
+                    <input name="firstName"
+                           th:value="${user.firstName}">
+                </label>
+                <label>
+                    Last Name
+                    <input name="lastName"
+                           th:value="${user.lastName}">
+                </label>
+                <label>
+                    Phone
+                    <input type="tel" name="phone"
+                           th:value="${user.phone}" required>
+                </label>
+                <input type="file" name="photo">
+                <input type="submit" value="Update">
+            </form>
+
+            <p>Account was created at <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+
+            <form th:action="@{/password/change}" th:object="${pass_dto}" method="post">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <label>
+                    Old password
+                    <input name="old" type="password" required>
+                </label>
+                <label>
+                    New password
+                <input name="password" id="password" type="password" onchange="checkPassword()" required
+                       title="The password should have at least 1 upper case, 1 lower case, 1 special char
+                               and length should be 10 characters long"
+                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{10,128}$">
+                </label>
+                <label>
+                    Confirm new password
+                    <input name="confirm" id="confirm" type="password" onchange="checkPassword()" required>
+                </label>
+                <input type="submit" id="btn" value="Change" disabled>
+            </form>
+
+            <hr>
+            <p><a th:href="@{/logout}">Sign out</a></p>
+        </main>
+    </div>
+</body>
+</html>
