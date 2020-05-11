@@ -13,7 +13,7 @@
         <div th:if="${message != null}">
             <p th:text="${message}"></p>
         </div>
-        <form th:action="@{/registration}" method="post" th:object="${user}">
+        <form th:action="@{/registration}" method="post" th:object="${user_dto}">
             <label>
                 Username
                 <input type="text" name="username" minlength="4" autofocus required>

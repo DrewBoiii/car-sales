@@ -4,11 +4,13 @@ import example.drew.carsales.persistence.dto.captcha.CaptchaResponseDto;
 import example.drew.carsales.persistence.dto.user.RegistrationDto;
 import example.drew.carsales.service.CaptchaService;
 import example.drew.carsales.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 public class RegistrationController {
 
@@ -30,14 +32,14 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String getRegistrationPage(Model model) {
-        model.addAttribute("user", new RegistrationDto());
+        model.addAttribute("user_dto", new RegistrationDto());
         model.addAttribute("siteKey", System.getenv(siteKey));
         return "registration";
     }
 
     @PostMapping("/registration")
     public String saveUser(Model model,
-                           @ModelAttribute("user") RegistrationDto dto,
+                           @ModelAttribute("user_dto") RegistrationDto dto,
                            @RequestParam("g-recaptcha-response") String captchaResponse) {
         CaptchaResponseDto responseDto = captchaService.getCaptchaResponseDto(captchaResponse);
         if(!responseDto.isSuccess()) {
