@@ -13,13 +13,17 @@ public interface UserService {
     void update(UserProfileDto userProfileDto) throws IOException;
     void update(UserRolesUpdateDto userRolesUpdateDto);
     void update(ChangePasswordDto changePasswordDto);
+    void update(User user);
     void deleteByUsername(String username);
     void deleteById(Long id);
     User getByUsername(String username);
+    User getByEmail(String email);
+    User getUserByCode(String code);
     User getById(Long id);
     Page<User> getAll(Pageable pageable);
     Page<User> getAll(UserCriteriaDto criteria, Pageable pageable);
     Boolean isExists(String username, String email);
-    Boolean isActivate(String code);
+    Boolean isCodeValid(String code);
+    void resetPasswordByEmail(User user);
 
 }

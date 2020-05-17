@@ -1,6 +1,6 @@
 package example.drew.carsales.persistence.dto.user;
 
-import example.drew.carsales.util.PasswordConstant;
+import example.drew.carsales.util.PasswordUtil;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -15,11 +15,11 @@ public class ChangePasswordDto {
     @NotBlank
     private String old;
 
-    @Pattern(regexp = PasswordConstant.PASSWORD_PATTERN, message = "Weak password.")
+    @Pattern(regexp = PasswordUtil.PASSWORD_PATTERN, message = "Weak password.")
     @NotBlank
     private String password;
 
-    @Pattern(regexp = PasswordConstant.PASSWORD_PATTERN, message = "Weak password.")
+    @Pattern(regexp = PasswordUtil.PASSWORD_PATTERN, message = "Weak password.")
     @NotBlank
     private String confirm;
 

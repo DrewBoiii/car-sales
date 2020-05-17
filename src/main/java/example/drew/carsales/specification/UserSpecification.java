@@ -24,14 +24,9 @@ public class UserSpecification {
     }
 
     public static Specification<User> getUsersByFirstName(String firstName) {
-        return StringUtils.isNotBlank(firstName) ? new Specification<User>() {
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("firstName")),
-                        "%" + HtmlSanitizerUtil.sanitize(firstName.toUpperCase().trim()) + "%");
-            }
-        } : null;
+        return StringUtils.isNotBlank(firstName) ? (Specification<User>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(
+                criteriaBuilder.upper(root.get("firstName")),
+                "%" + HtmlSanitizerUtil.sanitize(firstName.toUpperCase().trim()) + "%") : null;
     }
 
     public static Specification<User> getUsersByLastName(String lastName) {

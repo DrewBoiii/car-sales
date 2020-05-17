@@ -10,6 +10,7 @@ import example.drew.carsales.service.UserService;
 import example.drew.carsales.specification.UserSpecification;
 import example.drew.carsales.util.ImageUploadUtil;
 import example.drew.carsales.util.MailUtil;
+import example.drew.carsales.util.PasswordUtil;
 import example.drew.carsales.util.RoleConstant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,14 +50,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        String message = String.format(
-                "Hello, %s! \n" +
-                        "Welcome to the News Blog!\n" +
-                        "Please follow the link below to activate your account\n" +
-                        "http://localhost:8080/activation/%s",
-                user.getUsername(),
-                user.getActivationCode()
-        );
+        String message = MailUtil.getActivationCodeMessage(user.getUsername());
 
         mailService.send(user.getEmail(), "Account activation", message);
     }
@@ -92,6 +86,11 @@ public class UserServiceImpl implements UserService {
     public void update(ChangePasswordDto changePasswordDto) {
         User user = userRepository.findById(changePasswordDto.getId()).orElse(null);
         user.setPassword(passwordEncoder.encode(changePasswordDto.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void update(User user) {
         userRepository.save(user);
     }
 
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean isActivate(String code) {
+    public Boolean isCodeValid(String code) {
         User user = userRepository.findByActivationCode(code).orElse(null);
 
         if(user != null) {
@@ -148,6 +147,24 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User getUserByCode(String code) {
+        return userRepository.findByActivationCode(code).orElse(null);
+    }
+
+    @Override
+    public void resetPasswordByEmail(User user) {
+        String newPassword = PasswordUtil.getGeneratedPassword();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        mailService.send(user.getEmail(), "Password Reset", MailUtil.getNewTempPasswordMessage(newPassword));
     }
 
 }

@@ -1,7 +1,9 @@
 package example.drew.carsales.controller;
 
 import example.drew.carsales.persistence.dto.user.ChangePasswordDto;
+import example.drew.carsales.service.MailService;
 import example.drew.carsales.service.UserService;
+import example.drew.carsales.util.MailUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,10 +11,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Controller
 @RequestMapping("/password")
@@ -20,10 +22,12 @@ public class PasswordController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final MailService mailService;
 
-    public PasswordController(PasswordEncoder passwordEncoder, UserService userService) {
+    public PasswordController(PasswordEncoder passwordEncoder, UserService userService, MailService mailService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.mailService = mailService;
     }
 
     @PostMapping("/change")
@@ -46,14 +50,32 @@ public class PasswordController {
 
     @GetMapping("/reset")
     public String getResetPasswordPage() {
-
         return "password";
     }
 
     @PostMapping("/reset")
-    public String resetPassword() {
+    public String resetPassword(Model model,
+                                @NotBlank @Email @RequestParam("email") String email) {
+        example.drew.carsales.persistence.entity.User user = userService.getByEmail(email);
+        model.addAttribute("message", "Invalid email!");
+        if(user != null) {
+            user.setActivationCode(MailUtil.getGeneratedCode());
+            userService.update(user);
+            mailService.send(user.getEmail(), "Password Reset", MailUtil.getResetCodeMessage(user.getActivationCode()));
+            model.addAttribute("message", "Mail to confirm your identity was send.");
+        }
+        return "password";
+    }
 
-        return "redirect:/login";
+    @GetMapping("/reset/confirm/{code}")
+    public String getResetPasswordConfirmPage(Model model, @PathVariable("code") String code) {
+        model.addAttribute("message", "Reset password code was not found.");
+        example.drew.carsales.persistence.entity.User user = userService.getUserByCode(code);
+        if(user != null) {
+            userService.resetPasswordByEmail(user);
+            model.addAttribute("message", "Mail with a new temporary password was send.");
+        }
+        return "password";
     }
 
 }
