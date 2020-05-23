@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserProfileDto dto) throws IOException {
+    public void updateAndSendMail(UserProfileDto dto) throws IOException {
         User user = userRepository.findById(dto.getId()).orElse(null);
 
         user.setFirstName(dto.getFirstName());
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserRolesUpdateDto userRolesUpdateDto) {
+    public void updateAndSendMail(UserRolesUpdateDto userRolesUpdateDto) {
         User user = userRepository.findById(userRolesUpdateDto.getId()).orElse(null);
         Set<Role> roles = user.getRoles();
         List<String> roleNames = userRolesUpdateDto.getRoles();
@@ -85,16 +85,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(ChangePasswordDto changePasswordDto) {
+    public void updateAndSendMail(ChangePasswordDto changePasswordDto) {
         User user = userRepository.findById(changePasswordDto.getId()).orElse(null);
         user.setPassword(passwordEncoder.encode(changePasswordDto.getPassword()));
         userRepository.save(user);
     }
 
     @Override
-    public void update(User user) {
+    public void updateAndSendMail(User user) {
         userRepository.save(user);
         mailService.send(user.getEmail(), "Password Reset", MailUtil.getResetCodeMessage(user.getActivationCode()));
+    }
+
+    @Override
+    public void update(User user) {
+        userRepository.save(user);
     }
 
     @Override

@@ -18,7 +18,7 @@
                         <a th:href="@{/cars/editor}">Add</a>
                     </li>
                     <li sec:authorize="hasAuthority('user')">
-                        <a href="#">Favorites</a>
+                        <a th:href="@{/cars/favorites}">Favorites</a>
                     </li>
                     <li sec:authorize="hasAuthority('admin')">
                         <a th:href="@{/users}">Users</a>

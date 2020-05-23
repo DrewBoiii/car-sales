@@ -4,18 +4,36 @@ import example.drew.carsales.persistence.dto.user.*;
 import example.drew.carsales.persistence.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 public interface UserService {
 
+    @Transactional
     void save(RegistrationDto registrationDto);
-    void update(UserProfileDto userProfileDto) throws IOException;
-    void update(UserRolesUpdateDto userRolesUpdateDto);
-    void update(ChangePasswordDto changePasswordDto);
+
+    @Transactional
+    void updateAndSendMail(UserProfileDto userProfileDto) throws IOException;
+
+    @Transactional
+    void updateAndSendMail(UserRolesUpdateDto userRolesUpdateDto);
+
+    @Transactional
+    void updateAndSendMail(ChangePasswordDto changePasswordDto);
+
+    @Transactional
+    void updateAndSendMail(User user);
+
+    @Transactional
     void update(User user);
+
+    @Transactional
     void deleteByUsername(String username);
+
+    @Transactional
     void deleteById(Long id);
+
     User getByUsername(String username);
     User getByEmail(String email);
     User getUserByCode(String code);

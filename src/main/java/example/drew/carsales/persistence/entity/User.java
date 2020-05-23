@@ -1,9 +1,6 @@
 package example.drew.carsales.persistence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +12,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -57,6 +54,9 @@ public class User extends AbstractEntity implements UserDetails {
     @Type(type = "org.hibernate.type.BinaryType")
     @Column(columnDefinition = "bytea")
     private byte[] photo;
+
+    @ManyToMany
+    private Set<User> likes;
 
     @PrePersist
     void createdAt(){

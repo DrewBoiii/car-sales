@@ -28,6 +28,24 @@
                      alt="...">
             </div>
 
+            <p>
+                Likes <span th:text="${user.likes.size()}"></span>
+            </p>
+
+            <!--            like button-->
+            <div sec:authorize="hasAuthority('user')">
+                <div th:if="${isLiked}">
+                    <form th:action="@{|/users/${user.username}/fav|}" method="post">
+                        <button type="submit">Unlike</button>
+                    </form>
+                </div>
+                <div th:unless="${isLiked}">
+                    <form th:action="@{|/users/${user.username}/fav|}" method="post">
+                        <button type="submit">Like</button>
+                    </form>
+                </div>
+            </div>
+
             <!--            roles-->
             <div sec:authorize="hasAuthority('admin')">
                 <form th:action="@{/users/roles/update}" th:object="${role_dto}" method="post">

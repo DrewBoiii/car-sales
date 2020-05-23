@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 th:text="${car.carBrand.name}"></h3>
+    <p th:text="${car.carModel.name}"></p>
+    <p>Build
+        <span th:text="${#temporals.format(car.build, 'dd-MM-yyyy')}"></span>
+    </p>
+    <p>
+        <a th:href="@{|/home/${car.user.username}|}">
+            <span th:text="${car.user.username}"></span>
+        </a>
+    </p>
+    <div th:if="${isLiked}">
+        <form th:action="@{|/cars/${car.id}/fav|}" method="post">
+            <button type="submit">Unlike</button>
+        </form>
+    </div>
+    <div th:unless="${isLiked}">
+        <form th:action="@{|/cars/${car.id}/fav|}" method="post">
+            <button type="submit">Like</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -47,19 +48,50 @@ public class UserController {
     @PostMapping("/profile/update")
     @PreAuthorize("hasAuthority('user')")
     public String updateProfile(@ModelAttribute("user_dto") UserProfileDto userProfileDto) throws IOException {
-        userService.update(userProfileDto);
+        userService.updateAndSendMail(userProfileDto);
         return "redirect:/profile";
     }
 
     @GetMapping("/home/{username}")
-    public String getPublicProfile(@PathVariable("username") String username, Model model) {
-        example.drew.carsales.persistence.entity.User user = userService.getByUsername(username);
-        model.addAttribute("user", user);
+    public String getPublicProfile(Model model,
+                                   @PathVariable("username") String username,
+                                   @AuthenticationPrincipal User authUser) {
+        example.drew.carsales.persistence.entity.User publicUser = userService.getByUsername(username);
+
+        if(authUser != null) {
+            example.drew.carsales.persistence.entity.User user = userService.getByUsername(authUser.getUsername());
+            boolean isLiked = false;
+            if (publicUser.getLikes().contains(user)) {
+                isLiked = true;
+            }
+            model.addAttribute("isLiked", isLiked);
+        }
+
+        model.addAttribute("user", publicUser);
         model.addAttribute("roles", new ArrayList<>(roleService.getAll()));
         model.addAttribute("role_dto", new UserRolesUpdateDto());
         return "public_profile";
     }
 
+    @PostMapping("/users/{username}/fav")
+    @PreAuthorize(value = "hasAuthority('user')")
+    public String addToFavorites(@PathVariable("username") String username,
+                                 @AuthenticationPrincipal User authUser) {
+        example.drew.carsales.persistence.entity.User publicUser = userService.getByUsername(username);
+        example.drew.carsales.persistence.entity.User user = userService.getByUsername(authUser.getUsername());
+
+        Set<example.drew.carsales.persistence.entity.User> publicUserLikes = publicUser.getLikes();
+        boolean isContains = publicUserLikes.contains(user);
+
+        if(isContains) {
+            publicUserLikes.remove(user);
+        } else {
+            publicUserLikes.add(user);
+        }
+        userService.update(publicUser);
+
+        return "redirect:/home/{username}";
+    }
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('admin')")
@@ -78,7 +110,7 @@ public class UserController {
     @PostMapping("/users/roles/update")
     @PreAuthorize("hasAuthority('admin')")
     public String updateUserRoles(@ModelAttribute("role_dto") UserRolesUpdateDto userRolesUpdateDto) {
-        userService.update(userRolesUpdateDto);
+        userService.updateAndSendMail(userRolesUpdateDto);
         return "redirect:/users";
     }
 

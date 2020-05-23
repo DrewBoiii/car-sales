@@ -1,7 +1,6 @@
 package example.drew.carsales.controller;
 
 import example.drew.carsales.persistence.dto.user.ChangePasswordDto;
-import example.drew.carsales.service.MailService;
 import example.drew.carsales.service.UserService;
 import example.drew.carsales.util.MailUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +41,7 @@ public class PasswordController {
             model.addAttribute("message", "Passwords do not match!");
             return "private_profile";
         }
-        userService.update(dto);
+        userService.updateAndSendMail(dto);
         return "redirect:/profile";
     }
 
@@ -58,7 +57,7 @@ public class PasswordController {
         model.addAttribute("message", "Invalid email!");
         if(user != null) {
             user.setActivationCode(MailUtil.getGeneratedCode());
-            userService.update(user);
+            userService.updateAndSendMail(user);
             model.addAttribute("message", "Mail to confirm your identity was send.");
         }
         return "password";
