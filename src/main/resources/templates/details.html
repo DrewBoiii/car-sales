@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
@@ -19,6 +20,15 @@
             <span th:text="${car.user.username}"></span>
         </a>
     </p>
+
+    <div sec:authorize="hasAuthority('user')">
+        <div th:if="${#authentication.name.equals(car.user.username)}">
+            <form th:action="@{|/cars/${car.id}/remove|}" method="post">
+                <button type="submit">Sold</button>
+            </form>
+        </div>
+    </div>
+
     <div th:if="${isLiked}">
         <form th:action="@{|/cars/${car.id}/fav|}" method="post">
             <button type="submit">Unlike</button>

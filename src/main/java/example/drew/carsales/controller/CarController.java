@@ -96,4 +96,19 @@ public class CarController {
         return "redirect:/cars/{id}";
     }
 
+    @PostMapping("/{id}/remove")
+    @PreAuthorize(value = "hasAuthority('user')")
+    public String removeCar(@PathVariable("id") Long id,
+                            @AuthenticationPrincipal User authUser) {
+        Car car = carService.get(id);
+        example.drew.carsales.persistence.entity.User user = userService.getByUsername(authUser.getUsername());
+        if(car.getUser().equals(user)) {
+            carService.delete(id);
+            long carsSoldCount = user.getCarsSoldCount();
+            user.setCarsSoldCount(++carsSoldCount);
+            userService.update(user);
+        }
+        return "redirect:/home";
+    }
+
 }

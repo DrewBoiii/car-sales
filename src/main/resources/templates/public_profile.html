@@ -31,6 +31,9 @@
             <p>
                 Likes <span th:text="${user.likes.size()}"></span>
             </p>
+            <p>
+                Cars sold <span th:text="${user.carsSoldCount}"></span>
+            </p>
 
             <!--            like button-->
             <div sec:authorize="hasAuthority('user')">

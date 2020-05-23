@@ -58,9 +58,13 @@ public class User extends AbstractEntity implements UserDetails {
     @ManyToMany
     private Set<User> likes;
 
+    @Column
+    private Long carsSoldCount;
+
     @PrePersist
     void createdAt(){
         this.createdAt = LocalDateTime.now();
+        this.carsSoldCount = 0L;
     }
 
     @Override
