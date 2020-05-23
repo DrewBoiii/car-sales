@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -15,11 +16,11 @@ import java.time.LocalDateTime;
 @Entity
 public class Car extends AbstractEntity {
 
-    @Column
-    private String carBrand;
+    @OneToOne
+    private CarBrand carBrand;
 
-    @Column
-    private String carModel;
+    @OneToOne
+    private CarModel carModel;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
@@ -31,7 +32,7 @@ public class Car extends AbstractEntity {
     private String description;
 
     @Column
-    private LocalDateTime build;
+    private LocalDate build;
 
     @Column
     private LocalDateTime createdAt;
@@ -43,6 +44,7 @@ public class Car extends AbstractEntity {
     void createdAt(){
         this.createdAt = LocalDateTime.now();
         this.editedAt = LocalDateTime.now();
+        this.build = LocalDate.now();
     }
 
 }

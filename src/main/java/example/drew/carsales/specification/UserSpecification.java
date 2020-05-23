@@ -13,14 +13,9 @@ import javax.persistence.criteria.Root;
 public class UserSpecification {
 
     public static Specification<User> getUsersByUsername(String username) {
-        return StringUtils.isNotBlank(username) ? new Specification<User>() {
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("username")),
-                        "%" + HtmlSanitizerUtil.sanitize(username.toUpperCase().trim()) + "%");
-            }
-        } : null;
+        return StringUtils.isNotBlank(username) ? (Specification<User>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(
+                criteriaBuilder.upper(root.get("username")),
+                "%" + HtmlSanitizerUtil.sanitize(username.toUpperCase().trim()) + "%") : null;
     }
 
     public static Specification<User> getUsersByFirstName(String firstName) {
@@ -30,14 +25,9 @@ public class UserSpecification {
     }
 
     public static Specification<User> getUsersByLastName(String lastName) {
-        return StringUtils.isNotBlank(lastName) ? new Specification<User>() {
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("lastName")),
-                        "%" + HtmlSanitizerUtil.sanitize(lastName.toUpperCase().trim()) + "%");
-            }
-        } : null;
+        return StringUtils.isNotBlank(lastName) ? (Specification<User>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(
+                criteriaBuilder.upper(root.get("lastName")),
+                "%" + HtmlSanitizerUtil.sanitize(lastName.toUpperCase().trim()) + "%") : null;
     }
 
 }

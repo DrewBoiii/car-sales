@@ -10,7 +10,89 @@
 <body>
 <div layout:fragment="content">
     <main>
+        <!--            filter-->
+        <form th:action="@{/home}" th:object="${criteria}">
+            <label>
+                Brand
+                <select name="brand">
+                    <option value="" selected>Brand</option>
+                    <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
+                </select>
+            </label>
+            <label>
+                Model
+                <select name="model">
+                    <option value="" selected>Model</option>
+                    <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
+                </select>
+            </label>
+            <label>
+                Build
+                <input type="date" name="build"
+                       th:value="${#temporals.format(date, 'yyyy-MM-dd')}"
+                       th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
+                       th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
+            </label>
+            <label>
+                Kilometers
+                <input type="number" name="kilometers" min="0">
+            </label>
+            <label>
+                Owner
+                <input name="username" type="text" th:value="${criteria.username}">
+            </label>
+            <label>
+                Sort by
+                <select name="sort">
+                    <option value="createdAt" selected>Created at</option>
+                    <option value="carBrand">Brand</option>
+                    <option value="carModel">Model</option>
+                    <option value="kilometers">Kilometers</option>
+                    <option value="build">Build</option>
+                </select>
+                Order direction
+                <select name="order">
+                    <option value="asc">Asc</option>
+                    <option value="desc" selected>Desc</option>
+                </select>
+            </label>
+            <input type="submit" value="Filter">
+        </form>
 
+        <!--        cars-->
+        <h3 th:if="${page.content.size() == 0}">Seems like there is no cars :(</h3>
+        <div th:each="car : ${page.content}">
+            <h3 th:text="${car.carBrand.name}"></h3>
+            <p th:text="${car.carModel.name}"></p>
+            <p>Build
+                <span th:text="${#temporals.format(car.build, 'dd-MM-yyyy')}"></span>
+            </p>
+            <p>
+                <a th:href="@{|/home/${car.user.username}|}">
+                    <span th:text="${car.user.username}"></span>
+                </a>
+            </p>
+            <p>
+                <a href="#">Details</a>
+            </p>
+            <hr>
+        </div>
+
+        <!--            pagination-->
+        <div class="pagination-div">
+            <span th:if="${page.hasPrevious()}">
+                <a th:href="@{|/home?page=${page.number - 1}&sort=${criteria.sort}&order=${criteria.order}|}">Previous</a>
+            </span>
+            <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+                <span th:unless="${page.number == i}">
+                    <a th:href="@{|/home?page=${i}&sort=${criteria.sort}&order=${criteria.order}|}">[[${i}+1]]</a>
+                </span>
+            </th:block>
+            <span th:if="${page.hasNext()}">
+                    <a th:href="@{|/home?page=${page.number + 1}&sort=${criteria.sort}&order=${criteria.order}|}">Next</a>
+            </span>
+        </div>
     </main>
 </div>
 </body>

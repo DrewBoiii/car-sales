@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public final class ImageUploadUtil {
 
-    private static final long MAX_UPLOAD_AVATAR_SIZE = 307200;
+    private static final long MAX_FILE_UPLOAD_SIZE = 307200;
 
     /**
      * Метод для конвертации аватара
@@ -24,8 +24,8 @@ public final class ImageUploadUtil {
      * @throws IOException
      */
     public static byte[] avatarConvert(MultipartFile avatar) throws IOException {
-        String avatarType = imageType(avatar.getContentType());
-        if (avatar.getSize() > MAX_UPLOAD_AVATAR_SIZE) {
+        String avatarType = getImageType(avatar.getContentType());
+        if (avatar.getSize() > MAX_FILE_UPLOAD_SIZE) {
             return null;
         }
         if (avatarType == null) {
@@ -88,13 +88,31 @@ public final class ImageUploadUtil {
      * @param contentType тип загружаемого пользователем файла
      * @return если формат не является изображением возвращем null, если формат является изображением возвращаем его
      */
-    private static String imageType(String contentType) {
+    private static String getImageType(String contentType) {
         if (contentType == null)
             return null;
         if (!contentType.toLowerCase().startsWith("image/")) {
             return null;
         } else return contentType;
     }
+
+    private static BufferedImage getBufferedImage(byte[] image) throws IOException {
+        InputStream in = new ByteArrayInputStream(image);
+        return ImageIO.read(in);
+    }
+
+    public static byte[] getImage(MultipartFile image) throws IOException {
+        String imageType = getImageType(image.getContentType());
+        if (image.getSize() > MAX_FILE_UPLOAD_SIZE) {
+            return null;
+        }
+        if (imageType == null) {
+            return null;
+        } else {
+            return toByteArrayAutoClosable(getBufferedImage(image.getBytes()), imageType);
+        }
+    }
+
 }
 
 

@@ -22,12 +22,10 @@ public class PasswordController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
-    private final MailService mailService;
 
-    public PasswordController(PasswordEncoder passwordEncoder, UserService userService, MailService mailService) {
+    public PasswordController(PasswordEncoder passwordEncoder, UserService userService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-        this.mailService = mailService;
     }
 
     @PostMapping("/change")
@@ -61,7 +59,6 @@ public class PasswordController {
         if(user != null) {
             user.setActivationCode(MailUtil.getGeneratedCode());
             userService.update(user);
-            mailService.send(user.getEmail(), "Password Reset", MailUtil.getResetCodeMessage(user.getActivationCode()));
             model.addAttribute("message", "Mail to confirm your identity was send.");
         }
         return "password";

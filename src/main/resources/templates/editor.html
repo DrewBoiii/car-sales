@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <main>
+        <form th:action="@{/cars/editor}" th:object="${car_dto}" method="post">
+            <label>
+                Brand
+                <select name="brand" required>
+                    <option value="" selected>Brand</option>
+                    <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
+                </select>
+            </label>
+            <label>
+                Model
+                <select name="model" required>
+                    <option value="" selected>Model</option>
+                    <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
+                </select>
+            </label>
+            <label>
+                Kilometers
+                <input type="number" name="kilometers" min="0" required>
+            </label>
+            <label>
+                Build
+                <input type="date" name="build" required
+                       th:value="${#temporals.format(date, 'yyyy-MM-dd')}"
+                       th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
+                       th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
+            </label>
+            <label>
+                Description
+                <textarea name="description"></textarea>
+            </label>
+            <input type="submit" value="Save">
+        </form>
+    </main>
+</div>
+</body>
+</html>

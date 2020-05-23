@@ -1,25 +1,33 @@
-package example.drew.carsales.persistence.dto.user;
+package example.drew.carsales.persistence.dto.car;
 
 import lombok.Data;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserCriteriaDto {
+public class CarCriteriaDto {
 
     public static final String DEFAULT_SORT_CRITERIA = "createdAt";
 
     public static final String DEFAULT_ORDER_CRITERIA = "desc";
 
     @Size(max = 255)
+    private String brand;
+
+    @Size(max = 255)
+    private String model;
+
+    @Size(max = 255)
     private String username;
 
-    @Size(max = 255)
-    private String firstName;
+    @Positive
+    @Max(value = Long.MAX_VALUE)
+    private Long kilometers;
 
-    @Size(max = 255)
-    private String lastName;
+    private String build;
 
     @NotBlank
     @Size(max = 255)

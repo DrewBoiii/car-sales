@@ -12,6 +12,7 @@ import example.drew.carsales.util.ImageUploadUtil;
 import example.drew.carsales.util.MailUtil;
 import example.drew.carsales.util.PasswordUtil;
 import example.drew.carsales.util.RoleConstant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,10 +48,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRoles(Collections.singleton(roleService.getByName(RoleConstant.USER_ROLE)));
         user.setActivationCode(MailUtil.getGeneratedCode());
+        user.setActive(false);
 
         userRepository.save(user);
 
-        String message = MailUtil.getActivationCodeMessage(user.getUsername());
+        String message = MailUtil.getActivationCodeMessage(user.getUsername(), user.getActivationCode());
 
         mailService.send(user.getEmail(), "Account activation", message);
     }
@@ -92,6 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         userRepository.save(user);
+        mailService.send(user.getEmail(), "Password Reset", MailUtil.getResetCodeMessage(user.getActivationCode()));
     }
 
     @Override

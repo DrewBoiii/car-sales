@@ -8,14 +8,14 @@ public final class MailUtil {
         return UUID.randomUUID().toString();
     }
 
-    public static String getActivationCodeMessage(String username) {
+    public static String getActivationCodeMessage(String username, String code) {
         return String.format(
                 "Hello, %s! \n" +
                         "Welcome to the News Blog!\n" +
                         "Please follow the link below to activate your account\n" +
                         "http://localhost:8080/activation/%s",
                 username,
-                getGeneratedCode()
+                code
         );
     }
 

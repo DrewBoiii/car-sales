@@ -46,9 +46,7 @@ public class UserController {
 
     @PostMapping("/profile/update")
     @PreAuthorize("hasAuthority('user')")
-    public String updateProfile(@ModelAttribute("user_dto") UserProfileDto userProfileDto,
-                                @AuthenticationPrincipal User authUser) throws IOException {
-        example.drew.carsales.persistence.entity.User user = userService.getByUsername(authUser.getUsername());
+    public String updateProfile(@ModelAttribute("user_dto") UserProfileDto userProfileDto) throws IOException {
         userService.update(userProfileDto);
         return "redirect:/profile";
     }
@@ -67,8 +65,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('admin')")
     public String getUsersPage(Model model,
                                @ModelAttribute("criteria") UserCriteriaDto criteria,
-                               @PageableDefault(value = ITEMS_PER_PAGE) Pageable pageable,
-                               @AuthenticationPrincipal User user) {
+                               @PageableDefault(value = ITEMS_PER_PAGE) Pageable pageable) {
         Sort sort = Sort.by(criteria.getSort()).descending();
         if(criteria.getOrder().equals("asc")) {
             sort = Sort.by(criteria.getSort()).ascending();
@@ -80,8 +77,7 @@ public class UserController {
 
     @PostMapping("/users/roles/update")
     @PreAuthorize("hasAuthority('admin')")
-    public String updateUserRoles(@ModelAttribute("role_dto") UserRolesUpdateDto userRolesUpdateDto,
-                                  @AuthenticationPrincipal User user) {
+    public String updateUserRoles(@ModelAttribute("role_dto") UserRolesUpdateDto userRolesUpdateDto) {
         userService.update(userRolesUpdateDto);
         return "redirect:/users";
     }

@@ -5,6 +5,8 @@ import example.drew.carsales.persistence.repository.CarModelRepository;
 import example.drew.carsales.service.CarModelService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarModelServiceImpl implements CarModelService {
 
@@ -19,4 +21,8 @@ public class CarModelServiceImpl implements CarModelService {
         modelRepository.save(carModel);
     }
 
+    @Override
+    public List<CarModel> getAll() {
+        return modelRepository.findAll();
+    }
 }
