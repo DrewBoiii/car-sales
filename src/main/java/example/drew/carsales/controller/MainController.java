@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Controller
 public class MainController {
 
-    public static final int ITEMS_PER_PAGE = 5;
+    public static final int ITEMS_PER_PAGE = 9;
 
     private final CarBrandService carBrandService;
     private final CarModelService carModelService;

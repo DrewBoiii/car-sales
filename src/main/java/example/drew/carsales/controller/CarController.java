@@ -1,9 +1,14 @@
 package example.drew.carsales.controller;
 
+import example.drew.carsales.persistence.dto.car.CarCriteriaDto;
 import example.drew.carsales.persistence.dto.car.SaveCarDto;
 import example.drew.carsales.persistence.entity.Car;
 import example.drew.carsales.persistence.entity.FavoriteCar;
 import example.drew.carsales.service.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +21,8 @@ import java.time.LocalDateTime;
 @Controller
 @RequestMapping("/cars")
 public class CarController {
+
+    public static final int ITEMS_PER_PAGE = 9;
 
     private final CarBrandService carBrandService;
     private final CarModelService carModelService;
@@ -109,6 +116,28 @@ public class CarController {
             userService.update(user);
         }
         return "redirect:/home";
+    }
+
+    @GetMapping("/fav")
+    @PreAuthorize(value = "hasAuthority('user')")
+    public String getFavoriteCars(Model model,
+                                  @AuthenticationPrincipal User authUser,
+                                  @ModelAttribute("criteria") CarCriteriaDto criteria,
+                                  @PageableDefault(value = ITEMS_PER_PAGE) Pageable pageable) {
+        Sort sort = Sort.by(criteria.getSort()).descending();
+        if(criteria.getOrder().equals("asc")) {
+            sort = Sort.by(criteria.getSort()).ascending();
+        }
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        criteria.setUsername(authUser.getUsername());
+
+        model.addAttribute("page", favoriteCarService.getFavoriteCarsByUsername(criteria, pageRequest));
+        model.addAttribute("brands", carBrandService.getAll());
+        model.addAttribute("models", carModelService.getAll());
+        model.addAttribute("date", LocalDateTime.now());
+
+        return "favorites";
     }
 
 }

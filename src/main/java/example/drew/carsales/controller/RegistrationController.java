@@ -6,6 +6,7 @@ import example.drew.carsales.service.CaptchaService;
 import example.drew.carsales.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +27,13 @@ public class RegistrationController {
     }
 
     @GetMapping("/login")
+    @PreAuthorize(value = "isAnonymous()")
     public String getLoginPage() {
         return "login";
     }
 
     @GetMapping("/registration")
+    @PreAuthorize(value = "isAnonymous()")
     public String getRegistrationPage(Model model) {
         model.addAttribute("user_dto", new RegistrationDto());
         model.addAttribute("siteKey", System.getenv(siteKey));
@@ -38,6 +41,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
+    @PreAuthorize(value = "isAnonymous()")
     public String saveUser(Model model,
                            @ModelAttribute("user_dto") RegistrationDto dto,
                            @RequestParam("g-recaptcha-response") String captchaResponse) {

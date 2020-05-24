@@ -9,38 +9,43 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <main>
+    <main class="container">
+
+        <h1>Editor</h1>
+
         <form th:action="@{/cars/editor}" th:object="${car_dto}" method="post">
-            <label>
-                Brand
-                <select name="brand" required>
-                    <option value="" selected>Brand</option>
-                    <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
-                </select>
-            </label>
-            <label>
-                Model
-                <select name="model" required>
-                    <option value="" selected>Model</option>
-                    <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
-                </select>
-            </label>
-            <label>
-                Kilometers
-                <input type="number" name="kilometers" min="0" required>
-            </label>
-            <label>
-                Build
-                <input type="date" name="build" required
-                       th:value="${#temporals.format(date, 'yyyy-MM-dd')}"
-                       th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
-                       th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
-            </label>
-            <label>
-                Description
-                <textarea name="description"></textarea>
-            </label>
-            <input type="submit" value="Save">
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <select name="brand" style="display: block" required>
+                        <option value="" selected>Brand</option>
+                        <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
+                    </select>
+                </div>
+                <div class="input-field col s6">
+                    <select name="model" style="display: block" required>
+                        <option value="" selected>Model</option>
+                        <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
+                    </select>
+                </div>
+                <div class="input-field col s6">
+                    <input id="date" type="date" name="build" class="datepicker" required
+                           th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
+                           th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
+                    <label for="date">Build</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="kilo" type="number" name="kilometers" min="0" required>
+                    <label for="kilo">Kilometers</label>
+                </div>
+                <div class="input-field col s12">
+                    <textarea id="ta" name="description" class="materialize-textarea" data-length="255"></textarea>
+                    <label for="ta">Description</label>
+                </div>
+                <div class="input-field col s12">
+                    <input type="submit" class="waves-effect waves-light btn" value="Save">
+                </div>
+            </div>
         </form>
     </main>
 </div>

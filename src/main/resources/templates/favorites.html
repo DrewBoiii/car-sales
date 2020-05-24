@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Car Sales</title>
+    <title>Favorites</title>
 </head>
 <body>
 <div layout:fragment="content">
     <main class="container">
-
-        <h1>Car-Sales</h1>
+        <h1>Favorites</h1>
 
         <!--            filter-->
         <div class="row">
-            <form th:action="@{/home}" th:object="${criteria}">
+            <form th:action="@{/cars/fav}" th:object="${criteria}">
                 <div class="input-field col s6">
                     <select name="brand" style="display: block">
                         <option value="" selected>Brand</option>
@@ -40,7 +39,7 @@
                     <label th:for="kilo">Kilometers</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="owner" name="username" type="text" th:value="${criteria.username}">
+                    <input id="owner" name="username" type="text" th:value="${criteria.username}" disabled>
                     <label th:for="owner">Owner</label>
                 </div>
                 <div class="input-field col s6">
@@ -58,9 +57,7 @@
                         <option value="desc" selected>Desc</option>
                     </select>
                 </div>
-                <div class="col s12">
-                    <input type="submit" class="waves-effect waves-light btn" value="Filter">
-                </div>
+                <input type="submit" class="waves-effect waves-light btn" value="Filter">
             </form>
         </div>
 
@@ -121,7 +118,7 @@
         </div>
 
         <!--            pagination-->
-        <div class="col s12">
+        <div>
             <ul class="pagination">
                 <span th:if="${page.hasPrevious()}">
                     <li>

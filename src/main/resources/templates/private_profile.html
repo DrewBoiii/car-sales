@@ -8,75 +8,103 @@
     <title>Profile</title>
 </head>
 <body>
-    <div layout:fragment="content">
-        <main>
-            <h3 th:text="${user.username}"></h3>
+<div layout:fragment="content">
+    <main class="container">
 
-            <!--            image-->
-            <div th:if="${user.photo != null}">
-                <img th:src="*{'data:image/jpg;base64,' + user.getEncodedPhoto()}"
-                     th:height="200px"
-                     th:width="200px"
-                     alt="...">
-            </div>
-            <div th:unless="${user.photo != null}">
-                <img th:src="@{/images/anonymous.jpg}"
-                     th:height="200px"
-                     th:width="200px"
-                     alt="...">
-            </div>
+        <div class="col s12">
+            <h1 th:text="${user.username}"></h1>
+        </div>
 
-            <form th:action="@{/profile/update}" th:object="${user_dto}" enctype="multipart/form-data" method="post">
+        <!--            image-->
+        <div th:if="${user.photo != null}">
+            <img th:src="*{'data:image/jpg;base64,' + user.getEncodedPhoto()}"
+                 th:height="200px"
+                 th:width="200px"
+                 alt="...">
+        </div>
+        <div th:unless="${user.photo != null}">
+            <img th:src="@{/images/anonymous.jpg}"
+                 th:height="200px"
+                 th:width="200px"
+                 alt="...">
+        </div>
+
+        <div class="col s12">
+            <p>
+                Account was created at <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+            </p>
+        </div>
+
+        <div class="row"></div>
+        <div class="col s12">
+            <a th:href="@{/logout}" class="btn waves-effect waves-light blue right">Sign Out</a>
+        </div>
+        <div class="row"></div>
+
+        <h3>Profile Change</h3>
+
+        <form th:action="@{/profile/update}" th:object="${user_dto}" enctype="multipart/form-data" method="post">
+            <div class="row">
                 <input type="hidden" name="id" th:value="${user.id}">
-                <label>
-                    Username
-                    <input name="username"
-                           th:value="${user.username}">
-                </label>
-                <label>
-                    First Name
-                    <input name="firstName"
-                           th:value="${user.firstName}">
-                </label>
-                <label>
-                    Last Name
-                    <input name="lastName"
-                           th:value="${user.lastName}">
-                </label>
-                <label>
-                    Phone
-                    <input type="tel" name="phone"
-                           th:value="${user.phone}" required>
-                </label>
-                <input type="file" name="photo">
-                <input type="submit" value="Update">
-            </form>
 
-            <p>Account was created at <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+                <div class="file-field input-field col s12">
+                    <div class="btn">
+                        <span>Browse</span>
+                        <input id="photo1" type="file" name="photo" >
+                        <label for="photo1"></label>
+                    </div>
 
-            <form th:action="@{/password/change}" th:object="${pass_dto}" method="post">
+                    <div class="file-path-wrapper">
+                        <input id="photo2" class="file-path validate" type="text" name="photo" placeholder="Upload Image" >
+                        <label for="photo2"></label>
+                    </div>
+                </div>
+
+                <div class="input-field col s12">
+                    <input id="fn" name="firstName" th:value="${user.firstName}">
+                    <label for="fn">First Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="ln" name="lastName" th:value="${user.lastName}">
+                    <label for="ln">Last Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="phone" type="tel" name="phone" th:value="${user.phone}" required>
+                    <label for="phone">Phone</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input type="submit" class="waves-effect waves-light btn right" value="Update">
+                </div>
+            </div>
+        </form>
+
+        <h3>Password Change</h3>
+
+        <form th:action="@{/password/change}" th:object="${pass_dto}" method="post">
+            <div class="row">
                 <input type="hidden" name="id" th:value="${user.id}">
-                <label>
-                    Old password
-                    <input name="old" type="password" required>
-                </label>
-                <label>
-                    New password
-                <input name="password" id="password" type="password" onchange="checkPassword()" required
-                       title="The password should have at least 1 upper case, 1 lower case, 1 special char
-                               and length should be 10 characters long"
-                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{10,128}$">
-                </label>
-                <label>
-                    Confirm new password
+                <div class="input-field col s12">
+                    <input id="old" name="old" type="password" required>
+                    <label for="old">Old password</label>
+                </div>
+                <div class="input-field col s12">
+                    <input name="password" id="password" type="password" onchange="checkPassword()" required
+                           title="The password should have at least 1 upper case, 1 lower case, 1 special char
+                                   and length should be 10 characters long"
+                           pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{10,128}$">
+                    <label for="password">New password</label>
+                </div>
+                <div class="input-field col s12">
                     <input name="confirm" id="confirm" type="password" onchange="checkPassword()" required>
-                </label>
-                <input type="submit" id="btn" value="Change" disabled>
-            </form>
-
-            <hr>
-            <p><a th:href="@{/logout}">Sign out</a></p>
-        </main>
-    </div>
+                    <label for="confirm">Confirm new password</label>
+                </div>
+                <div class="input-field col s12">
+                    <input type="submit" id="btn" value="Change" class="waves-effect waves-light btn right" disabled>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
 </body>
 </html>

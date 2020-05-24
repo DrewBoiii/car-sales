@@ -46,11 +46,13 @@ public class PasswordController {
     }
 
     @GetMapping("/reset")
+    @PreAuthorize(value = "isAnonymous()")
     public String getResetPasswordPage() {
         return "password";
     }
 
     @PostMapping("/reset")
+    @PreAuthorize(value = "isAnonymous()")
     public String resetPassword(Model model,
                                 @NotBlank @Email @RequestParam("email") String email) {
         example.drew.carsales.persistence.entity.User user = userService.getByEmail(email);
@@ -64,6 +66,7 @@ public class PasswordController {
     }
 
     @GetMapping("/reset/confirm/{code}")
+    @PreAuthorize(value = "isAnonymous()")
     public String getResetPasswordConfirmPage(Model model, @PathVariable("code") String code) {
         model.addAttribute("message", "Reset password code was not found.");
         example.drew.carsales.persistence.entity.User user = userService.getUserByCode(code);

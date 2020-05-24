@@ -9,69 +9,104 @@
     <title>Profile</title>
 </head>
 <body>
-    <div layout:fragment="content">
-        <main>
-            <h3 th:text="${user.username}"></h3>
-            <p><strong>Rating 1</strong></p>
+<div layout:fragment="content">
+    <main class="container">
+        <div class="row"></div>
+        <div class="row">
+            <div class="col s3"></div>
+            <div class="col s6">
+                <h1>Profile</h1>
+                <div class="card">
+                    <div class="card-image">
 
-            <!--            image-->
-            <div th:if="${user.photo != null}">
-                <img th:src="*{'data:image/jpg;base64,' + user.getEncodedPhoto()}"
-                     th:height="200px"
-                     th:width="200px"
-                     alt="...">
-            </div>
-            <div th:unless="${user.photo != null}">
-                <img th:src="@{/images/anonymous.jpg}"
-                     th:height="200px"
-                     th:width="200px"
-                     alt="...">
-            </div>
-
-            <p>
-                Likes <span th:text="${user.likes.size()}"></span>
-            </p>
-            <p>
-                Cars sold <span th:text="${user.carsSoldCount}"></span>
-            </p>
-
-            <!--            like button-->
-            <div sec:authorize="hasAuthority('user')">
-                <div th:if="${isLiked}">
-                    <form th:action="@{|/users/${user.username}/fav|}" method="post">
-                        <button type="submit">Unlike</button>
-                    </form>
-                </div>
-                <div th:unless="${isLiked}">
-                    <form th:action="@{|/users/${user.username}/fav|}" method="post">
-                        <button type="submit">Like</button>
-                    </form>
-                </div>
-            </div>
-
-            <!--            roles-->
-            <div sec:authorize="hasAuthority('admin')">
-                <form th:action="@{/users/roles/update}" th:object="${role_dto}" method="post">
-                    <h5>Roles</h5>
-                    <input type="hidden" name="id" th:value="${user.id}">
-                    <div th:each="role : ${roles}">
-                        <div th:if="${#lists.contains(user.roles, role)}">
-                            <label>
-                                <span th:text="${role.name}"></span>
-                                <input type="checkbox" name="roles" th:value="${role.name}" checked>
-                            </label>
+                        <!--            image-->
+                        <div th:if="${user.photo != null}">
+                            <img th:src="*{'data:image/jpg;base64,' + user.getEncodedPhoto()}"
+                                 th:height="400px"
+                                 th:width="400px"
+                                 alt="...">
                         </div>
-                        <div th:unless="${#lists.contains(user.roles, role)}">
-                            <label>
-                                <span th:text="${role.name}"></span>
-                                <input type="checkbox" name="roles" th:value="${role.name}">
-                            </label>
+                        <div th:unless="${user.photo != null}">
+                            <img th:src="@{/images/anonymous.jpg}"
+                                 th:height="400px"
+                                 th:width="400px"
+                                 alt="...">
                         </div>
                     </div>
-                    <input type="submit" value="Update">
-                </form>
+                    <div class="card-content">
+                        <span class="card-title">
+                            <div class="card-title grey-text text-darken-4">
+                                <div class="col s6">
+                                    <strong th:text="${user.username}"></strong>
+                                </div>
+                                <div class="col s6" sec:authorize="hasAuthority('user')">
+                                    <div class="right" th:if="${isLiked}">
+                                        <form th:action="@{|/users/${user.username}/fav|}" method="post">
+                                            <button class="btn red lighten-2" type="submit" name="action">
+                                                <i class="material-icons center">favorite</i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="right" th:unless="${isLiked}">
+                                        <form th:action="@{|/users/${user.username}/fav|}" method="post">
+                                            <button class="btn red lighten-2" type="submit" name="action">
+                                                <i class="material-icons center">favorite_border</i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                        <div class="row"></div>
+                        <p>
+                            Likes <strong th:text="${user.likes.size()}"></strong>
+                        </p>
+                        <p>
+                            Cars sold <strong th:text="${user.carsSoldCount}"></strong>
+                        </p>
+                        <p>
+                            With <strong>Car-Sales</strong> since the <strong th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></strong>
+                        </p>
+                    </div>
+                    <div class="card-action" sec:authorize="hasAuthority('user')">
+                        <div class="text-darken-8">
+                            <h4 th:text="${user.phone}"></h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!--            roles-->
+                <div class="row"></div>
+                <div sec:authorize="hasAuthority('admin')">
+                    <form th:action="@{/users/roles/update}" th:object="${role_dto}" method="post">
+                        <h3>Change User Roles</h3>
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <div th:each="role : ${roles}">
+                            <div th:if="${#lists.contains(user.roles, role)}">
+                                <label>
+                                    <input type="checkbox" name="roles" th:value="${role.name}" checked />
+                                    <span th:text="${role.name}"></span>
+                                </label>
+                            </div>
+                            <div th:unless="${#lists.contains(user.roles, role)}">
+                                <label>
+                                    <input type="checkbox" name="roles" th:value="${role.name}" />
+                                    <span th:text="${role.name}"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row"></div>
+                        <div class="row">
+                            <div class="col s12 center">
+                                <input type="submit" class="col s12 waves-effect waves-light btn" value="Update">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </main>
-    </div>
+            <div class="col s3"></div>
+        </div>
+    </main>
+</div>
 </body>
 </html>

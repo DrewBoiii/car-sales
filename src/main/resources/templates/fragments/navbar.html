@@ -7,9 +7,10 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:fragment="navbar">
+<div th:fragment="navbar">
+    <div class="navbar-fixed">
         <nav>
-            <div>
+            <div class="container nav-wrapper">
                 <ul>
                     <li>
                         <a th:href="@{/home}">Home</a>
@@ -18,11 +19,13 @@
                         <a th:href="@{/cars/editor}">Add</a>
                     </li>
                     <li sec:authorize="hasAuthority('user')">
-                        <a th:href="@{/cars/favorites}">Favorites</a>
+                        <a th:href="@{/cars/fav}">Favorites</a>
                     </li>
                     <li sec:authorize="hasAuthority('admin')">
                         <a th:href="@{/users}">Users</a>
                     </li>
+                </ul>
+                <ul class="right hide-on-med-and-down">
                     <li sec:authorize="isAnonymous()">
                         <a th:href="@{/login}">Sign in</a>
                     </li>
@@ -33,5 +36,6 @@
             </div>
         </nav>
     </div>
+</div>
 </body>
 </html>
