@@ -39,7 +39,7 @@
                     <label th:for="kilo">Kilometers</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="owner" name="username" type="text" th:value="${criteria.username}" disabled>
+                    <input id="owner" name="username" type="text">
                     <label th:for="owner">Owner</label>
                 </div>
                 <div class="input-field col s6">
@@ -57,7 +57,9 @@
                         <option value="desc" selected>Desc</option>
                     </select>
                 </div>
-                <input type="submit" class="waves-effect waves-light btn" value="Filter">
+                <div class="input-field col s12">
+                    <input type="submit" class="waves-effect waves-light btn" value="Filter">
+                </div>
             </form>
         </div>
 

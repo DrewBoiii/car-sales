@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -78,9 +79,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateAndSendMail(UserRolesUpdateDto userRolesUpdateDto) {
         User user = userRepository.findById(userRolesUpdateDto.getId()).orElse(null);
-        Set<Role> roles = user.getRoles();
+        Set<Role> roles = new HashSet<>();
         List<String> roleNames = userRolesUpdateDto.getRoles();
         roleNames.forEach(roleName -> roles.add(roleService.getByName(roleName)));
+        user.setRoles(roles);
         userRepository.save(user);
     }
 
