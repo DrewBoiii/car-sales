@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col s3"></div>
             <div class="col s6">
-                <h1>Details</h1>
+                <h1>Объявление</h1>
                 <div class="card">
                     <div class="card-image">
                         <!--            image-->
@@ -51,16 +51,16 @@
                             </span>
                         <p>
                             <strong th:text="${car.kilometers}"></strong>
-                            <strong> km</strong>
+                            <strong> км</strong>
                         </p>
                         <p>
-                            Owner
+                            Владелец
                             <a th:href="@{|/home/${car.user.username}|}">
                                 <span th:text="${car.user.username}"></span>
                             </a>
                         </p>
                         <p>
-                            Build <strong th:text="${#temporals.format(car.createdAt, 'dd-MM-yyy')}"></strong>
+                            Дата <strong th:text="${#temporals.format(car.createdAt, 'dd-MM-yyy')}"></strong>
                         </p>
                     </div>
                     <div class="card-action">
@@ -68,7 +68,7 @@
                             <div th:if="${#authentication.name.equals(car.user.username)}">
                                 <form th:action="@{|/cars/${car.id}/remove|}" method="post">
                                     <div>
-                                        <button class="waves-effect waves-light btn red" type="submit">Sold</button>
+                                        <button class="waves-effect waves-light btn red" type="submit">Продано</button>
                                     </div>
                                 </form>
                             </div>

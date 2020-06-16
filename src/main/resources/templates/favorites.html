@@ -11,20 +11,20 @@
 <body>
 <div layout:fragment="content">
     <main class="container">
-        <h1>Favorites</h1>
+        <h1>Избранное</h1>
 
         <!--            filter-->
         <div class="row">
             <form th:action="@{/cars/fav}" th:object="${criteria}">
                 <div class="input-field col s6">
                     <select name="brand" style="display: block">
-                        <option value="" selected>Brand</option>
+                        <option value="" selected>Бренд</option>
                         <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
                     </select>
                 </div>
                 <div class="input-field col s6">
                     <select name="model" style="display: block">
-                        <option value="" selected>Model</option>
+                        <option value="" selected>Модель</option>
                         <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
                     </select>
                 </div>
@@ -32,40 +32,40 @@
                     <input id="date" type="date" name="build" class="datepicker"
                            th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
                            th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
-                    <label for="date">Build</label>
+                    <label for="date">Дата</label>
                 </div>
                 <div class="input-field col s6">
                     <input id="kilo" type="number" name="kilometers" min="0">
-                    <label th:for="kilo">Kilometers</label>
+                    <label th:for="kilo">Пробег</label>
                 </div>
                 <div class="input-field col s12">
                     <input id="owner" name="username" type="text">
-                    <label th:for="owner">Owner</label>
+                    <label th:for="owner">Владелец</label>
                 </div>
                 <div class="input-field col s6">
                     <select name="sort" style="display: block">
-                        <option value="createdAt" selected>Created at</option>
-                        <option value="carBrand">Brand</option>
-                        <option value="carModel">Model</option>
-                        <option value="kilometers">Kilometers</option>
-                        <option value="build">Build</option>
+                        <option value="createdAt" selected>Дата создания объявления</option>
+                        <option value="carBrand">Бренд</option>
+                        <option value="carModel">Модель</option>
+                        <option value="kilometers">Пробег</option>
+                        <option value="build">Дата производства</option>
                     </select>
                 </div>
                 <div class="input-field col s6">
                     <select name="order" style="display: block">
-                        <option value="asc">Asc</option>
-                        <option value="desc" selected>Desc</option>
+                        <option value="asc">По возрастанию</option>
+                        <option value="desc" selected>По убыванию</option>
                     </select>
                 </div>
                 <div class="input-field col s12">
-                    <input type="submit" class="waves-effect waves-light btn" value="Filter">
+                    <input type="submit" class="waves-effect waves-light btn" value="Фильтровать">
                 </div>
             </form>
         </div>
 
         <!--        cars-->
         <div class="row">
-            <h3 th:if="${page.content.size() == 0}">Seems like there is no cars :(</h3>
+            <h3 th:if="${page.content.size() == 0}">Кажется здесь отсутствуют какие-либо объявления :(</h3>
             <div th:each="car : ${page.content}">
                 <div class="col s4">
                     <div class="card">
@@ -92,7 +92,7 @@
                             </span>
                             <p>
                                 <span th:text="${car.kilometers}"></span>
-                                <span> km</span>
+                                <span> км</span>
                             </p>
                             <p>
                                 <a th:href="@{|/home/${car.user.username}|}">

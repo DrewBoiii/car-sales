@@ -31,17 +31,17 @@
 
         <div class="col s12">
             <p>
-                Account was created at <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
+                Аккаунт был создан <span th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></span>
             </p>
         </div>
 
         <div class="row"></div>
         <div class="col s12">
-            <a th:href="@{/logout}" class="btn waves-effect waves-light blue right">Sign Out</a>
+            <a th:href="@{/logout}" class="btn waves-effect waves-light blue right">Выйти</a>
         </div>
         <div class="row"></div>
 
-        <h3>Profile Change</h3>
+        <h3>Профиль</h3>
 
         <form th:action="@{/profile/update}" th:object="${user_dto}" enctype="multipart/form-data" method="post">
             <div class="row">
@@ -49,58 +49,58 @@
 
                 <div class="file-field input-field col s12">
                     <div class="btn">
-                        <span>Browse</span>
+                        <span>Загрузить</span>
                         <input id="photo1" type="file" name="photo" >
                         <label for="photo1"></label>
                     </div>
 
                     <div class="file-path-wrapper">
-                        <input id="photo2" class="file-path validate" type="text" name="photo" placeholder="Upload Image" >
+                        <input id="photo2" class="file-path validate" type="text" name="photo" placeholder="Загрузить изображение" >
                         <label for="photo2"></label>
                     </div>
                 </div>
 
                 <div class="input-field col s12">
                     <input id="fn" name="firstName" th:value="${user.firstName}">
-                    <label for="fn">First Name</label>
+                    <label for="fn">Имя</label>
                 </div>
                 <div class="input-field col s12">
                     <input id="ln" name="lastName" th:value="${user.lastName}">
-                    <label for="ln">Last Name</label>
+                    <label for="ln">Фамилия</label>
                 </div>
                 <div class="input-field col s12">
                     <input id="phone" type="tel" name="phone" th:value="${user.phone}" required>
-                    <label for="phone">Phone</label>
+                    <label for="phone">Телефон</label>
                 </div>
 
                 <div class="input-field col s12">
-                    <input type="submit" class="waves-effect waves-light btn right" value="Update">
+                    <input type="submit" class="waves-effect waves-light btn right" value="Обновить">
                 </div>
             </div>
         </form>
 
-        <h3>Password Change</h3>
+        <h3>Сменить пароль</h3>
 
         <form th:action="@{/password/change}" th:object="${pass_dto}" method="post">
             <div class="row">
                 <input type="hidden" name="id" th:value="${user.id}">
                 <div class="input-field col s12">
                     <input id="old" name="old" type="password" required>
-                    <label for="old">Old password</label>
+                    <label for="old">Старый пароль</label>
                 </div>
                 <div class="input-field col s12">
                     <input name="password" id="password" type="password" onchange="checkPassword()" required
                            title="The password should have at least 1 upper case, 1 lower case, 1 special char
                                    and length should be 10 characters long"
                            pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{10,128}$">
-                    <label for="password">New password</label>
+                    <label for="password">Новый пароль</label>
                 </div>
                 <div class="input-field col s12">
                     <input name="confirm" id="confirm" type="password" onchange="checkPassword()" required>
-                    <label for="confirm">Confirm new password</label>
+                    <label for="confirm">Повторите новый пароль</label>
                 </div>
                 <div class="input-field col s12">
-                    <input type="submit" id="btn" value="Change" class="waves-effect waves-light btn right" disabled>
+                    <input type="submit" id="btn" value="Изменить" class="waves-effect waves-light btn right" disabled>
                 </div>
             </div>
         </form>

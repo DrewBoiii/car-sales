@@ -11,20 +11,20 @@
 <div layout:fragment="content">
     <main class="container">
 
-        <h1>Editor</h1>
+        <h1>Редактор</h1>
 
         <form th:action="@{/cars/editor}" th:object="${car_dto}" method="post">
 
             <div class="row">
                 <div class="input-field col s6">
                     <select name="brand" style="display: block" required>
-                        <option value="" selected>Brand</option>
+                        <option value="" selected>Бренд</option>
                         <option th:each="b : ${brands}" th:text="${b.name}" th:value="${b.name}"></option>
                     </select>
                 </div>
                 <div class="input-field col s6">
                     <select name="model" style="display: block" required>
-                        <option value="" selected>Model</option>
+                        <option value="" selected>Модель</option>
                         <option th:each="m : ${models}" th:text="${m.name}" th:value="${m.name}"></option>
                     </select>
                 </div>
@@ -32,30 +32,30 @@
                     <input id="date" type="date" name="build" class="datepicker" required
                            th:min="${#temporals.format(date.minusYears(300), 'yyyy-MM-dd')}"
                            th:max="${#temporals.format(date, 'yyyy-MM-dd')}">
-                    <label for="date">Build</label>
+                    <label for="date">Дата</label>
                 </div>
                 <div class="input-field col s6">
                     <input id="kilo" type="number" name="kilometers" min="0" required>
-                    <label for="kilo">Kilometers</label>
+                    <label for="kilo">Пробег</label>
                 </div>
                 <div class="file-field input-field col s12">
                     <div class="btn">
-                        <span>Browse</span>
+                        <span>Загрузить</span>
                         <input id="photo1" type="file" name="photo" >
                         <label for="photo1"></label>
                     </div>
 
                     <div class="file-path-wrapper">
-                        <input id="photo2" class="file-path validate" type="text" name="photo" placeholder="Upload Image" >
+                        <input id="photo2" class="file-path validate" type="text" name="photo" placeholder="Загрузить изображение" >
                         <label for="photo2"></label>
                     </div>
                 </div>
                 <div class="input-field col s12">
                     <textarea id="ta" name="description" class="materialize-textarea" data-length="255"></textarea>
-                    <label for="ta">Description</label>
+                    <label for="ta">Описание</label>
                 </div>
                 <div class="input-field col s12">
-                    <input type="submit" class="waves-effect waves-light btn" value="Save">
+                    <input type="submit" class="waves-effect waves-light btn" value="Сохранить">
                 </div>
             </div>
         </form>

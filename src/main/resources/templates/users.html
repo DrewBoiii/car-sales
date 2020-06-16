@@ -11,62 +11,29 @@
 <body>
 <div layout:fragment="content">
     <main class="container">
-        <h1>Users</h1>
-
-        <!--            filter-->
-<!--        <div class="row">-->
-<!--            <form th:action="@{/users}" th:object="${criteria}">-->
-<!--                <label>-->
-<!--                    Username-->
-<!--                    <input name="username" type="text" th:value="${criteria.username}">-->
-<!--                </label>-->
-<!--                <label>-->
-<!--                    First name-->
-<!--                    <input name="firstName" type="text" th:value="${criteria.firstName}">-->
-<!--                </label>-->
-<!--                <label>-->
-<!--                    Last name-->
-<!--                    <input name="lastName" type="text" th:value="${criteria.lastName}">-->
-<!--                </label>-->
-<!--                <label>-->
-<!--                    Sort by-->
-<!--                    <select name="sort">-->
-<!--                        <option value="createdAt" selected>Created at</option>-->
-<!--                        <option value="username">Username</option>-->
-<!--                        <option value="firstName">First name</option>-->
-<!--                        <option value="lastName">Last name</option>-->
-<!--                    </select>-->
-<!--                    Order direction-->
-<!--                    <select name="order">-->
-<!--                        <option value="asc">Asc</option>-->
-<!--                        <option value="desc" selected>Desc</option>-->
-<!--                    </select>-->
-<!--                </label>-->
-<!--                <input type="submit" value="Filter">-->
-<!--            </form>-->
-<!--        </div>-->
+        <h1>Пользователи</h1>
 
         <!--            filter-->
         <div class="row">
             <form th:action="@{/users}" th:object="${criteria}">
                 <div class="input-field col s4">
                     <input id="username" name="username" type="text" th:value="${criteria.username}">
-                    <label th:for="username">Owner</label>
+                    <label th:for="username">Владелец</label>
                 </div>
                 <div class="input-field col s4">
                     <input id="fn" name="firstName" type="text" th:value="${criteria.firstName}">
-                    <label th:for="fn">First Name</label>
+                    <label th:for="fn">Имя</label>
                 </div>
                 <div class="input-field col s4">
                     <input id="ln" name="lastName" type="text" th:value="${criteria.lastName}">
-                    <label th:for="ln">Last Name</label>
+                    <label th:for="ln">Фамилия</label>
                 </div>
                 <div class="input-field col s6">
                     <select name="sort" style="display: block">
-                        <option value="createdAt" selected>Created at</option>
-                        <option value="username">Username</option>
-                        <option value="firstName">First name</option>
-                        <option value="lastName">Last name</option>
+                        <option value="createdAt" selected>Дата</option>
+                        <option value="username">Логин</option>
+                        <option value="firstName">Имя</option>
+                        <option value="lastName">Фамилия</option>
                     </select>
                 </div>
                 <div class="input-field col s6">
@@ -76,14 +43,14 @@
                     </select>
                 </div>
                 <div class="col s12">
-                    <input type="submit" class="waves-effect waves-light btn" value="Filter">
+                    <input type="submit" class="waves-effect waves-light btn" value="Фильтровать">
                 </div>
             </form>
         </div>
 
         <!--            users-->
         <div class="row">
-            <h3 th:if="${page.content.size() == 0}">Seems like there is no users :(</h3>
+            <h3 th:if="${page.content.size() == 0}">Кажется здесь отсутствуют какие-либо пользователи :(</h3>
             <div th:each="user : ${page.content}">
                 <div class="col s4">
                     <div class="card">
@@ -105,15 +72,15 @@
                         </span>
                             <div class="row"></div>
                             <p>
-                                Likes <strong th:text="${user.likes.size()}"></strong>
+                                Понравилось - <strong th:text="${user.likes.size()}"></strong>
                             </p>
                             <p>
-                                Cars sold <strong th:text="${user.carsSoldCount}"></strong>
+                                Объявлений закрыто - <strong th:text="${user.carsSoldCount}"></strong>
                             </p>
                             <p>
-                                With <strong>Car-Sales</strong> since the <strong th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></strong>
+                                Вместе с <strong>Car-Sales</strong> с <strong th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy HH:mm')}"></strong>
                             </p>
-                            <h5>Roles</h5>
+                            <h5>Права</h5>
                             <div th:each="role : ${user.roles}">
                                 <p th:text="${role.name}"></p>
                             </div>
