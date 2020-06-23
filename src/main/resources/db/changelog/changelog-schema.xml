@@ -1,0 +1,207 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!--    user    -->
+    <changeSet id="1" author="Gubanov D.A.">
+        <createTable tableName="person">
+            <column name="id" type="BIGINT" autoIncrement="true"/>
+            <column name="username" type="VARCHAR"/>
+            <column name="password" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="phone" type="VARCHAR"/>
+            <column name="activation_code" type="VARCHAR"/>
+            <column name="active" type="BOOLEAN"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="first_name" type="VARCHAR"/>
+            <column name="last_name" type="VARCHAR"/>
+            <column name="photo" type="BYTEA"/>
+            <column name="cars_sold_count" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Gubanov D.A.">
+        <addPrimaryKey tableName="person" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="3" author="Gubanov D.A.">
+        <addUniqueConstraint tableName="person" columnNames="id"/>
+        <addNotNullConstraint tableName="person" columnName="id"/>
+        <addUniqueConstraint tableName="person" columnNames="username"/>
+        <addNotNullConstraint tableName="person" columnName="username"/>
+        <addNotNullConstraint tableName="person" columnName="password"/>
+        <addUniqueConstraint tableName="person" columnNames="email"/>
+        <addNotNullConstraint tableName="person" columnName="email"/>
+    </changeSet>
+
+    <!--    role    -->
+    <changeSet id="4" author="Gubanov D.A.">
+        <createTable tableName="role">
+            <column name="id" type="BIGINT" autoIncrement="true"/>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Gubanov D.A.">
+        <addPrimaryKey tableName="role" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="6" author="Gubanov D.A.">
+        <addUniqueConstraint tableName="role" columnNames="id"/>
+        <addNotNullConstraint tableName="role" columnName="id"/>
+        <addUniqueConstraint tableName="role" columnNames="name"/>
+        <addNotNullConstraint tableName="role" columnName="name"/>
+    </changeSet>
+
+    <!--    person_roles    -->
+    <changeSet id="7" author="Gubanov D.A.">
+        <createTable tableName="person_roles">
+            <column name="user_id" type="BIGINT"/>
+            <column name="roles_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="person_roles" baseColumnNames="user_id" constraintName="fk_pr_person"
+                                 referencedTableName="person" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="person_roles" baseColumnNames="roles_id" constraintName="fk_pr_role"
+                                 referencedTableName="role" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    car    -->
+    <changeSet id="9" author="Gubanov D.A.">
+        <createTable tableName="car">
+            <column name="id" type="BIGINT" autoIncrement="true"/>
+            <column name="build" type="DATE"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="description" type="VARCHAR"/>
+            <column name="edited_at" type="TIMESTAMP"/>
+            <column name="kilometers" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="car_brand_id" type="BIGINT"/>
+            <column name="car_model_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10" author="Gubanov D.A.">
+        <addPrimaryKey tableName="car" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="11" author="Gubanov D.A.">
+        <addUniqueConstraint tableName="car" columnNames="id"/>
+        <addNotNullConstraint tableName="car" columnName="id"/>
+    </changeSet>
+
+    <changeSet id="12" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="car" baseColumnNames="user_id" constraintName="fk_car_person"
+                                 referencedTableName="person" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    car_brand    -->
+    <changeSet id="13" author="Gubanov D.A.">
+        <createTable tableName="car_brand">
+            <column name="id" type="BIGINT" autoIncrement="true"/>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="14" author="Gubanov D.A.">
+        <addPrimaryKey tableName="car_brand" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="15" author="Gubanov D.A.">
+        <addUniqueConstraint tableName="car_brand" columnNames="id"/>
+        <addNotNullConstraint tableName="car_brand" columnName="id"/>
+    </changeSet>
+
+    <changeSet id="16" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="car" baseColumnNames="car_brand_id" constraintName="fk_car_brand"
+                                 referencedTableName="car_brand" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    car_model    -->
+    <changeSet id="17" author="Gubanov D.A.">
+        <createTable tableName="car_model">
+            <column name="id" type="BIGINT" autoIncrement="true"/>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="18" author="Gubanov D.A.">
+        <addPrimaryKey tableName="car_model" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="19" author="Gubanov D.A.">
+        <addUniqueConstraint tableName="car_model" columnNames="id"/>
+        <addNotNullConstraint tableName="car_model" columnName="id"/>
+    </changeSet>
+
+    <changeSet id="20" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="car" baseColumnNames="car_model_id" constraintName="fk_car_model"
+                                 referencedTableName="car_model" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    car_brand_car_models    -->
+    <changeSet id="21" author="Gubanov D.A.">
+        <createTable tableName="car_brand_car_models">
+            <column name="car_brand_id" type="BIGINT"/>
+            <column name="car_models_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="22" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="car_brand_car_models" baseColumnNames="car_brand_id" constraintName="fk_cbcm_brand"
+                                 referencedTableName="car_brand" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="car_brand_car_models" baseColumnNames="car_models_id" constraintName="fk_cbcm_model"
+                                 referencedTableName="car_model" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    person_likes    -->
+    <changeSet id="23" author="Gubanov D.A.">
+        <createTable tableName="person_likes">
+            <column name="user_id" type="BIGINT"/>
+            <column name="likes_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="24" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="person_likes" baseColumnNames="user_id" constraintName="fk_ul_user"
+                                 referencedTableName="person" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="person_likes" baseColumnNames="likes_id" constraintName="fk_ul_likes"
+                                 referencedTableName="person" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <!--    favorite_car    -->
+    <changeSet id="25" author="Gubanov D.A.">
+        <createTable tableName="favorite_car">
+            <column name="id" type="BIGINT"/>
+            <column name="car_id" type="BIGINT"/>
+            <column name="person_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="26" author="Gubanov D.A.">
+        <addPrimaryKey tableName="favorite_car" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="27" author="Gubanov D.A.">
+        <addForeignKeyConstraint baseTableName="favorite_car" baseColumnNames="car_id" constraintName="fk_fc_car"
+                                 referencedTableName="car" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+        <addForeignKeyConstraint baseTableName="favorite_car" baseColumnNames="person_id" constraintName="fk_fc_person"
+                                 referencedTableName="person" referencedColumnNames="id"
+                                 onDelete="CASCADE" onUpdate="RESTRICT"/>
+    </changeSet>
+
+</databaseChangeLog>

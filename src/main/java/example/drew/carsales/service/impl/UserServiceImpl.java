@@ -8,11 +8,7 @@ import example.drew.carsales.service.MailService;
 import example.drew.carsales.service.RoleService;
 import example.drew.carsales.service.UserService;
 import example.drew.carsales.specification.UserSpecification;
-import example.drew.carsales.util.ImageUploadUtil;
-import example.drew.carsales.util.MailUtil;
-import example.drew.carsales.util.PasswordUtil;
-import example.drew.carsales.util.RoleConstant;
-import org.apache.commons.lang3.StringUtils;
+import example.drew.carsales.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(RegistrationDto dto) {
         User user = new User();
-        user.setUsername(dto.getUsername());
+        user.setUsername(HtmlSanitizerUtil.sanitize(dto.getUsername()));
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -142,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isExists(String username, String email) {
-        return userRepository.existsByUsernameOrEmail(username, email);
+        return userRepository.existsByUsernameOrEmail(HtmlSanitizerUtil.sanitize(username), email);
     }
 
     @Override

@@ -28,8 +28,7 @@ public class ApplicationConfig {
 
     @PostConstruct
     public void init() {
-        addRoles();
-        addBrandsAndModels();
+
     }
 
     private void addRoles() {
